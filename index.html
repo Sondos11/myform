@@ -32,7 +32,7 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzN6d9OCpIM_Z6uGWk5T8Y1L2tVzaGr6E51KYcFnSlZfWgZWr-QrtSAcfJY8SBhmHU/exec'; // استبدل YOUR_SCRIPT_ID بالمعرف الفعلي للسكربت الخاص بك
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxey0dFIqtzTfHRonUVGssXN4kttUGYRblq3-7-SZqYWrhV58fn-z1jEq0toG_a1Z4/exec'; // استبدل YOUR_GOOGLE_SCRIPT_WEB_APP_URL بالمعرف الفعلي للسكربت الخاص بك
 
             document.getElementById('crudForm').addEventListener('submit', function(event) {
                 event.preventDefault();
@@ -66,25 +66,26 @@
             document.getElementById('fetchData').addEventListener('click', fetchData);
 
             function fetchData() {
-                // Note: This requires an endpoint that returns JSON data from your Google Sheet
-                fetch('YOUR_GOOGLE_SHEET_API_URL') // يجب إعداد API للوصول إلى البيانات من Google Sheets
-                    .then(response => response.json())
-                    .then(data => {
-                        const tableBody = document.querySelector('#dataTable tbody');
-                        tableBody.innerHTML = '';
-                        data.forEach(row => {
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
-                                <td>${row.Email}</td>
-                                <td>${row.Password}</td>
-                                <td>
-                                    <button onclick="editRow(${row.id})">Edit</button>
-                                    <button onclick="deleteRow(${row.id})">Delete</button>
-                                </td>
-                            `;
-                            tableBody.appendChild(tr);
-                        });
+                fetch(scriptURL, {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#dataTable tbody');
+                    tableBody.innerHTML = '';
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${row.Email}</td>
+                            <td>${row.Password}</td>
+                            <td>
+                                <button onclick="editRow(${row.id})">Edit</button>
+                                <button onclick="deleteRow(${row.id})">Delete</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(tr);
                     });
+                });
             }
 
             function editRow(id) {
