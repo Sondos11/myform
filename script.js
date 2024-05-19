@@ -1,58 +1,130 @@
-document.getElementById("myForm").addEventListener("submit", function (event) {
-  event.preventDefault();
+const scriptURL =
+  "https://script.google.com/macros/s/AKfycbxOXmFSk_nLxDYQJs4adPwOIWfW6hvIqZQPcn3RKKJF_8ctsV3r-mLXCqRo5Z1W21M/exec"; // استبدل YOUR_SCRIPT_ID بالمعرف الفعلي للسكربت الخاص بك
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const data = { email, password };
+document
+  .getElementById("crudForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
 
-  // Check if the data file has already been downloaded
-  const downloaded = localStorage.getItem("downloaded");
-  let formData = JSON.parse(localStorage.getItem("formData")) || [];
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-  if (!downloaded) {
-    // First time download
-    formData.push(data);
-    localStorage.setItem("formData", JSON.stringify(formData));
+    fetch(scriptURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        Email: email,
+        Password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result === "success") {
+          alert("Data added successfully!");
+          document.getElementById("crudForm").reset();
+          fetchData();
+        } else {
+          alert("Error adding data: " + data.error);
+        }
+      })
+      .catch((error) => alert("Request failed: " + error));
+  });
 
-    const wb = XLSX.utils.book_new();
-    const ws_data = [["Email", "Password"]].concat(
-      formData.map((item) => [item.email, item.password])
-    );
-    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+document.getElementById("fetchData").addEventListener("click", fetchData);
 
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, "form_data.xlsx");
-
-    localStorage.setItem("downloaded", true);
-  } else {
-    // Add data to local storage
-    formData.push(data);
-    localStorage.setItem("formData", JSON.stringify(formData));
-    alert("Data has been saved locally.");
-  }
-
-  // Reset the form fields
-  document.getElementById("myForm").reset();
-});
-
-function downloadExcel() {
-  const formData = JSON.parse(localStorage.getItem("formData")) || [];
-  if (formData.length === 0) {
-    alert("No data to download.");
-    return;
-  }
-
-  const wb = XLSX.utils.book_new();
-  const ws_data = [["Email", "Password"]].concat(
-    formData.map((item) => [item.email, item.password])
-  );
-  const ws = XLSX.utils.aoa_to_sheet(ws_data);
-
-  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-  XLSX.writeFile(wb, "form_data.xlsx");
+function fetchData() {
+  // Note: This requires an endpoint that returns JSON data from your Google Sheet
+  fetch("YOUR_GOOGLE_SHEET_API_URL") // يجب إعداد API للوصول إلى البيانات من Google Sheets
+    .then((response) => response.json())
+    .then((data) => {
+      const tableBody = document.querySelector("#dataTable tbody");
+      tableBody.innerHTML = "";
+      data.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+                    <td>${row.Email}</td>
+                    <td>${row.Password}</td>
+                    <td>
+                        <button onclick="editRow(${row.id})">Edit</button>
+                        <button onclick="deleteRow(${row.id})">Delete</button>
+                    </td>
+                `;
+        tableBody.appendChild(tr);
+      });
+    });
 }
 
-document.body.insertAdjacentHTML(
-  "beforeend",
-  '<button onclick="downloadExcel()">Download Excel</button>'
-);
+function editRow(id) {
+  // منطق تعديل الصف المحدد
+}
+
+function deleteRow(id) {
+  // منطق حذف الصف المحدد
+}
+const scriptURL =
+  "https://script.google.com/macros/s/AKfycbxOXmFSk_nLxDYQJs4adPwOIWfW6hvIqZQPcn3RKKJF_8ctsV3r-mLXCqRo5Z1W21M/exec"; // استبدل YOUR_SCRIPT_ID بالمعرف الفعلي للسكربت الخاص بك
+
+document
+  .getElementById("crudForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    fetch(scriptURL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        Email: email,
+        Password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result === "success") {
+          alert("Data added successfully!");
+          document.getElementById("crudForm").reset();
+          fetchData();
+        } else {
+          alert("Error adding data: " + data.error);
+        }
+      })
+      .catch((error) => alert("Request failed: " + error));
+  });
+
+document.getElementById("fetchData").addEventListener("click", fetchData);
+
+function fetchData() {
+  // Note: This requires an endpoint that returns JSON data from your Google Sheet
+  fetch("YOUR_GOOGLE_SHEET_API_URL") // يجب إعداد API للوصول إلى البيانات من Google Sheets
+    .then((response) => response.json())
+    .then((data) => {
+      const tableBody = document.querySelector("#dataTable tbody");
+      tableBody.innerHTML = "";
+      data.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+                    <td>${row.Email}</td>
+                    <td>${row.Password}</td>
+                    <td>
+                        <button onclick="editRow(${row.id})">Edit</button>
+                        <button onclick="deleteRow(${row.id})">Delete</button>
+                    </td>
+                `;
+        tableBody.appendChild(tr);
+      });
+    });
+}
+
+function editRow(id) {
+  // منطق تعديل الصف المحدد
+}
+
+function deleteRow(id) {
+  // منطق حذف الصف المحدد
+}
