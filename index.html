@@ -1,42 +1,100 @@
 <!DOCTYPE html>
 <html lang="ar">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
     <title>CRUD Application</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
     <div class="container">
-      <h2>CRUD Application</h2>
-      <form id="crudForm">
-        <div class="inputs">
-          <label>EMAIL</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="example@test.com"
-            required />
-          <label>PASSWORD</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Min 6 characters long"
-            required />
-          <button type="submit">Submit</button>
-        </div>
-      </form>
-      <button id="fetchData">Fetch Data</button>
-      <table id="dataTable">
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Password</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+        <h2>CRUD Application</h2>
+        <form id="crudForm">
+            <div class="inputs">
+                <label>EMAIL</label>
+                <input type="email" id="email" placeholder="example@test.com" required />
+                <label>PASSWORD</label>
+                <input type="password" id="password" placeholder="Min 6 characters long" required />
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        <button id="fetchData">Fetch Data</button>
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
-    <script src="script.js"></script>
-  </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxOXmFSk_nLxDYQJs4adPwOIWfW6hvIqZQPcn3RKKJF_8ctsV3r-mLXCqRo5Z1W21M/exec'; // استبدل YOUR_SCRIPT_ID بالمعرف الفعلي للسكربت الخاص بك
+
+            document.getElementById('crudForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'Email': email,
+                        'Password': password
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        alert('Data added successfully!');
+                        document.getElementById('crudForm').reset();
+                        fetchData();
+                    } else {
+                        alert('Error adding data: ' + data.error);
+                    }
+                })
+                .catch(error => alert('Request failed: ' + error));
+            });
+
+            document.getElementById('fetchData').addEventListener('click', fetchData);
+
+            function fetchData() {
+                // Note: This requires an endpoint that returns JSON data from your Google Sheet
+                fetch('YOUR_GOOGLE_SHEET_API_URL') // يجب إعداد API للوصول إلى البيانات من Google Sheets
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.querySelector('#dataTable tbody');
+                        tableBody.innerHTML = '';
+                        data.forEach(row => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${row.Email}</td>
+                                <td>${row.Password}</td>
+                                <td>
+                                    <button onclick="editRow(${row.id})">Edit</button>
+                                    <button onclick="deleteRow(${row.id})">Delete</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(tr);
+                        });
+                    });
+            }
+
+            function editRow(id) {
+                // منطق تعديل الصف المحدد
+            }
+
+            function deleteRow(id) {
+                // منطق حذف الصف المحدد
+            }
+        });
+    </script>
+</body>
 </html>
