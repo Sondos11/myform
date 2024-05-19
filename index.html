@@ -2,15 +2,13 @@
 <html lang="ar">
   <head>
     <meta charset="UTF-8" />
-    <title>نموذج بسيط</title>
+    <title>CRUD Application</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
   </head>
   <body>
-    <form id="myForm">
-      <div class="container">
-        <div class="brand-logo"></div>
-        <div class="brand-title">TWITTER</div>
+    <div class="container">
+      <h2>CRUD Application</h2>
+      <form id="crudForm">
         <div class="inputs">
           <label>EMAIL</label>
           <input
@@ -24,11 +22,21 @@
             id="password"
             placeholder="Min 6 characters long"
             required />
-          <button type="submit">LOGIN</button>
+          <button type="submit">Submit</button>
         </div>
-        <a href="https://twitter.com/prathkum">MADE BY PRATHAM</a>
-      </div>
-    </form>
+      </form>
+      <button id="fetchData">Fetch Data</button>
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
