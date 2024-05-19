@@ -13,22 +13,8 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 400px;
     text-align: center;
-}
-
-.brand-logo {
-    background-image: url('logo.png');
-    height: 100px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    margin: 0 auto 20px;
-}
-
-.brand-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
 }
 
 .inputs label {
@@ -62,13 +48,20 @@ button:hover {
     background-color: #0d8de4;
 }
 
-a {
-    display: block;
+table {
+    width: 100%;
     margin-top: 20px;
-    color: #1da1f2;
-    text-decoration: none;
+    border-collapse: collapse;
 }
 
-a:hover {
-    text-decoration: underline;
+table,
+th,
+td {
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
 }
